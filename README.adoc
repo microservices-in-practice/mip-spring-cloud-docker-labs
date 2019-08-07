@@ -1,0 +1,8 @@
+= Microservices in Practice with Spring Boot & Docler - Labs
+
+This repository contains labs material for the workshop.
+
+== Copyright and Licensing
+
+Copyright (C) 2019 Krzysztof Sobkowiak +
+Free use of this software is granted under the terms of the link:LICENSE[Apache License].
