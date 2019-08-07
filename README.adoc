@@ -1,4 +1,4 @@
-= Microservices in Practice with Spring Boot & Docker - Labs
+= Microservices in Practice with Spring Cloud & Docker - Labs
 
 This repository contains labs material for the workshop.
 
