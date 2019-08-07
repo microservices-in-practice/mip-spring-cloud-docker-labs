@@ -1,0 +1,181 @@
+= Preparing the lab environment
+
+== Prerequisites
+
+The attendees should fulfill following prerequisites:
+
+* knowledge about Java and Java programming (JDK 8)
+* basic knowledge about configuration management using Maven
+* basic knowledge about Spring and Spring Boot
+
+== Preparing the environment
+
+=== Java Environment
+
+You should be able to develop Java 8 application and build it using Maven. If you don't have actually such environment, please install following software:
+
+* JDK 8 (http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Oracle JDK] or https://developers.redhat.com/products/openjdk/download/[Red Hat OpenJDK])
+* https://maven.apache.org/download.cgi[Maven] (3.5+)
+* Your favourite Java IDE (https://www.jetbrains.com/idea/download/#section=windows[InteiJ CE] or https://www.eclipse.org/downloads/[Eclipse])
+
+=== Docker Environment
+
+During the lab we will use a local Docker environment provided by https://docs.docker.com/toolbox/toolbox_install_windows/[Docker Toolbox]. Please install following components
+
+* VirtualBox
+* Docker Client
+* Docker Machine
+* Docker Compose
+
+[NOTE]
+====
+If you have a previous version of VirtualBox (5.x, 6.x) installed, do not reinstall it with the Docker Toolbox installer. When prompted, uncheck it.
+
+If you have Virtual Box running, you must shut it down before running the installer.
+====
+
+
+[NOTE]
+====
+The virtualization extensions are sometimes disabled in BIOS, usually by laptop manufacturers. Verify the virtualization extensions are enabled in BIOS. The settings for Intel® VT or AMD-V are usually in the Chipset or Processor menus. 
+====
+
+
+To install the Toolbox:
+
+* Download the latest version of Docker Toolbox, go to https://github.com/docker/toolbox/releases[Toolbox Releases] and download the latest .exe file
+* Install Docker Toolbox by double-clicking the installer.
+* If Windows security dialog prompts you to allow the program to make a change, choose *Yes*. The system displays the *Setup - Docker Toolbox for Windows* wizard. Accept all the defaults and then Install
+* Allow the installer modiy the `PATH` variable. The docker executables will be available in your shell console
+* When notified by Windows Security the installer will make changes, make sure you allow the installer to make the necessary changes.
+
+[NOTE]
+====
+VirtualBox doesn't work correctly when logged in VPN. Please logout from VPN connection before performing the next steps. 
+====
+
+After installation of the Toolbox:
+
+* please create and configure the Docker Machine using following command
++
+[source, bash]
+----
+docker-machine create --driver virtualbox --virtualbox-memory 6000 wks
+----
++
+[NOTE]
+====
+If you have already the `.docker/machine/` dorectory in your home directory it may be outdated (especially the certificates). 
+Please remove (or backup) the directory before creating the new Docker machine
+====
+* To see how to connect your Docker Client to the Docker Engine running on this virtual machine, run:
++
+[source, bash]
+----
+docker-machine env wks
+----
+* Next run the command from the last line of the output from the previous command
++
+[source, bash]
+----
+@FOR /f "tokens=*" %i IN ('docker-machine env wks') DO @%i
+----
+* Check whether you can manage your Docker machine
++
+[source, bash]
+----
+docker info
+docker ps
+----
+* Verify you can start containers. Type the `docker run hello-world` command and press *RETURN*.
++
+The command does some work for you, if everything runs well, the command’s output looks like this:
++
+[source, bash]
+----
+docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+1b930d010525: Pull complete
+Digest: sha256:6540fc08ee6e6b7b63468dc3317e3303aae178cb8a45ed3123180328bcc1d20f
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+----
+* Remove the uneccessary containers and images
++
+[source, bash]
+----
+FOR /f "tokens=*" %i IN ('docker ps -aq') DO docker rm %i
+FOR /f "tokens=*" %i IN ('docker images -aq') DO docker rmi %i
+----
+* Pull the necessary Docker images (to avoid pulling during the workshop)
++
+[source, bash]
+----
+docker pull spotify/kafka
+docker pull mysql:8.0
+docker pull openjdk:8-jre-alpine
+docker pull mongo
+docker images
+----
+* Shut down the Docker machine
++
+[source, bash]
+----
+docker-machine stop wks
+----
+
+
+=== Other software
+
+Install following additional software
+
+* https://www.getpostman.com/apps[Postman]
+* https://git-scm.com/download/win[Git for Windows] or any other git client
+
+== Fork and clone the lab repositories
+
+Plese create a GitHub account if you don't have it done yet. Please fork following repositories into your account
+
+* https://github.com/microservices-in-practice/mip-spring-cloud-docker-catalog
+* https://github.com/microservices-in-practice/mip-spring-cloud-docker-order
+* https://github.com/microservices-in-practice/mip-spring-cloud-docker-customer
+* https://github.com/microservices-in-practice/mip-spring-cloud-docker-infra
+* https://github.com/microservices-in-practice/mip-spring-cloud-docker-labs
+* https://github.com/microservices-in-practice/mip-spring-cloud-docker-config
+
+Next clone the forked repositories into your notebook
+
+[source, bash]
+----
+git clone https://github.com/<your-account>/mip-spring-cloud-docker-catalog.git
+....
+----
+
+or if you use the ssh authentication
+
+[source, bash]
+----
+git clone git@github.com:<your-account>/mip-spring-cloud-docker-catalog.git
+....
+----
